@@ -1,0 +1,67 @@
+version: "3.7"
+services:
+  orchestrator:
+    image: quay.io/opusvl/dito-eobs-orchestrator:latest
+    container_name: dito-eobs-orchestrator
+    ports:
+      - 8080:8080
+    networks: 
+      - qewd-hit
+  oidc_provider:
+    image: quay.io/opusvl/dito-eobs-oidc-provider:latest
+    container_name: dito-eobs-provider
+    ports:
+      - 8081:8080
+    networks: 
+      - qewd-hit
+  oidc_client:
+    image: quay.io/opusvl/dito-eobs-oidc-client:latest
+    container_name: dito-eobs-client
+    environment:
+      - mode=microservice
+    networks: 
+      - qewd-hit
+  mpi_service:
+    image: quay.io/opusvl/dito-eobs-fhir:latest
+    container_name: dito-eobs-fhir
+    environment:
+      - mode=microservice
+    networks: 
+      - qewd-hit
+  openehr_service:
+    image: quay.io/opusvl/dito-eobs-openehr:latest
+    container_name: dito-eobs-openehr
+    environment:
+      - mode=microservice
+    networks: 
+      - qewd-hit
+  audit_service:
+    image: quay.io/opusvl/dito-eobs-audit:latest
+    container_name: dito-eobs-audit
+    environment:
+      - mode=microservice
+    networks: 
+      - qewd-hit
+  ethercis_db:
+    image: rtweed/ethercis-db
+    container_name: ripple_ethercis_db
+    ports:
+      - 5432:5432
+    networks: 
+      - ecis-net
+  ethercis_service:
+    image: rtweed/ethercis-server
+    container_name: ripple_ethercis_server
+    environment:
+      - DB_IP=ethercis_db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PW=postgres
+    ports:
+      - 8084:8080
+    networks: 
+      - ecis-net
+
+networks: 
+  qewd-hit:
+  ecis-net:

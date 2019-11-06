@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  orchestrator:
+    build: main
+  oidc_provider:
+    build: oidc-provider
+  oidc_client:
+    build: oidc-client
+  mpi_service:
+    build: fhir-mpi
+  openehr_service:
+    build: openehr-ms
+  audit_service:
+    build: audit-ms
